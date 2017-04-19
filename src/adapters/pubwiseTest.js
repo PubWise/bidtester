@@ -4,10 +4,10 @@ var bidfactory = require('../bidfactory.js');
 var bidmanager = require('../bidmanager.js');
 var adloader = require('../adloader');
 
-var PubwiseAdapter = function PubwiseAdapter() {
+var PubwiseBidSimAdapter = function PubwiseBidSimAdapter() {
     var pubwiseUrl = "adtest.pubwise.io/api/v1/bid/get";
 
-    $$PREBID_GLOBAL$$.pubwiseResponseHandler = pubwiseResponseHandler;
+    $$PREBID_GLOBAL$$.pubwiseResponseHandler = pubwiseBidSimResponseHandler;
 
     return {
         callBids: _callBids
@@ -36,27 +36,27 @@ var PubwiseAdapter = function PubwiseAdapter() {
         utils.logInfo('pubwise callBids complete');
     }
 
-    function pubwiseResponseHandler(pubwiseResponseObject) {
+    function pubwiseBidSimResponseHandler(pubwiseResponseObject) {
         utils.logInfo('pubwise ResponseHandler beginning');
         utils.logInfo('Response Object',pubwiseResponseObject);
         var placements = [];
 
-        if (isResponseInvalid()) {
+        if (isInvalidResponse()) {
             console.log('invalid response');
-            return fillPlacementEmptyBid();
+            return fillEmptyBidReturns();
         }
 
-        pubwiseResponseObject.bids.forEach(pushPubwiseBid);
-        var allBidResponse = fillPlacementEmptyBid(placements);
+        pubwiseResponseObject.bids.forEach(addPubwiseBidResponse);
+        var allBidResponse = fillEmptyBidReturns(placements);
         utils.logInfo('pubwise Response handler complete');
 
         return allBidResponse;
 
-        function isResponseInvalid() {
+        function isInvalidResponse() {
             return !pubwiseResponseObject || !pubwiseResponseObject.bids || !Array.isArray(pubwiseResponseObject.bids) || pubwiseResponseObject.bids.length <= 0;
         }
 
-        function pushPubwiseBid(pubwiseBid) {
+        function addPubwiseBidResponse(pubwiseBid) {
             utils.logInfo('Pubwsie Bid',pubwiseBid);
             utils.logInfo('Pubwise Reqs',$$PREBID_GLOBAL$$._bidsRequested.find(bidSet => bidSet.bidderCode === 'pubwise'));
             var placementCode = '';
@@ -67,7 +67,7 @@ var PubwiseAdapter = function PubwiseAdapter() {
 
             if (!bidReq) {
                 utils.logMessage('PubWise No bidReq');
-                return pushErrorBid(placementCode);
+                return addErrorBidResponse(placementCode);
             }
 
             bidReq.status = CONSTANTS.STATUS.GOOD;
@@ -79,7 +79,7 @@ var PubwiseAdapter = function PubwiseAdapter() {
 
             if (!cpm) {
                 utils.logMessage('PubWise No CPM');
-                return pushErrorBid(placementCode);
+                return addErrorBid(placementCode);
             }
 
             var bid = bidfactory.createBid(1, bidReq);
@@ -94,22 +94,22 @@ var PubwiseAdapter = function PubwiseAdapter() {
             bidmanager.addBidResponse(placementCode, bid);
         }
 
-        function fillPlacementEmptyBid(places) {
+        function fillEmptyBidReturns(places) {
             console.log('Fill Placement Bids',$$PREBID_GLOBAL$$._bidsRequested);
             $$PREBID_GLOBAL$$
                 ._bidsRequested.find(bidSet => bidSet.bidderCode === 'pubwise')
-                .bids.forEach(fillIfNotFilled);
+                .bids.forEach(fillEmpty);
 
-            function fillIfNotFilled(bid) {
+            function fillEmpty(bid) {
                 if (utils.contains(places, bid.placementCode)) {
                     return null;
                 }
 
-                pushErrorBid(bid);
+                addErrorBidResponse(bid);
             }
         }
 
-        function pushErrorBid(bidRequest) {
+        function addErrorBidResponse(bidRequest) {
             var bid = bidfactory.createBid(2, bidRequest);
             bid.bidderCode = 'pubwise';
             bidmanager.addBidResponse(bidRequest.placementCode, bid);
@@ -117,4 +117,4 @@ var PubwiseAdapter = function PubwiseAdapter() {
     }
 };
 
-module.exports = PubwiseAdapter;
+module.exports = PubwiseBidSimAdapter;
