@@ -8,16 +8,23 @@ The PubWise.io BidTester is a Prebid.js compatible bid adapter which allows you 
 
 The Bidtester was built by the team at PubWise.io to test configurations for our users and our own Header Bidding implementations.
 
-## How do I include it in my Prebid?
+## How do I use it?
+
+### First Get An account
 
 1. Register for an account at http://www.pubwise.io
-2. Get the /src/adapters/pubwise.js adapter file and add it to your Prebid.js project in the same location
-3. Add pubwise to your adapters.json file
-4. Build your custom Prebid now bundled with the PubWise adpter
+2. Add your site, add name, URL, etc.
+3. You will see a link to "testing" after the site is created
+
+### Add the PubWise.io Adapter into your Prebid
+
+1. Get the /src/adapters/pubwise.js adapter file and add it to your Prebid.js project in the same location
+2. Add pubwise to your adapters.json file
+3. Build your custom Prebid
 
 Note: We are working to have our adapter included directly with the Prebid download, but it is not currently available in that manner.
 
-## How do I send bids?
+### Send Bids and Get Test Ads in Response
 
 In your PubWise.io account backend click on the "Testing" link for your site. Sample code will be provided there with the proper IDs. The basic format and options are described below so you can customize by hand once you get the hang of it.
 
