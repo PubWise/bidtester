@@ -24,6 +24,10 @@ The Bidtester was built by the team at PubWise.io to test configurations for our
 
 Note: We are working to have our adapter included directly with the Prebid download, but it is not currently available in that manner.
 
+### Configure Your Lineitem
+
+Lineitems can be configured as they would for any other bidder. However, since you have discreet control over the bids you may want to consider only creating line items for a handful of bids you will request. $20.00, $5.00, $1.00 and $0.50 may be a good starting point.
+
 ### Send Bids and Get Test Ads in Response
 
 In your PubWise.io account backend click on the "Testing" link for your site. Sample code will be provided there with the proper IDs. The basic format and options are described below so you can customize by hand once you get the hang of it.
