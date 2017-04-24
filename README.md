@@ -46,7 +46,7 @@ In your PubWise.io account backend click on the "Testing" link for your site. Sa
 ### Params Documentation
 
 | Param Name | Valid Types | Description |
-| ___ | ___ |
+| --- | --- |
 | site_id | string | GUID from PubWise.io backend, unique to each site. |
 | width | integer | Width for the requested ad unit. |
 | height | integer | Height for the requested ad unit. |
